@@ -1,0 +1,69 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+export DH_VERBOSE=1
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	# nothing yet
+	touch configure-stamp
+
+build: build-stamp
+build-stamp: configure-stamp
+	dh_testdir
+	qmake && make
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp
+	( if [ -f Makefile ] ; then $(MAKE) clean ; fi )
+	rm -f Makefile
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_clean -k
+	dh_installdirs
+	$(MAKE) INSTALL_ROOT=$(CURDIR)/debian/tmp install
+
+binary: binary-indep binary-arch
+
+binary-indep: build install
+
+binary-arch: build install
+	dh_testdir
+	dh_testroot
+	dh_installchangelogs
+	dh_installdocs
+	dh_installexamples
+	dh_install --sourcedir=$(CURDIR)/debian/tmp
+	dh_strip -v --package=libiodata0    --dbg-package=libiodata0-dbg
+	dh_strip -v --package=iodata-tests  --dbg-package=iodata-tests-dbg
+# dh_installmenu
+# dh_installdebconf
+# dh_installlogrotate
+# dh_installemacsen
+# dh_installpam
+# dh_installmime
+# dh_python
+# dh_installinit
+# dh_installcron
+# dh_installinfo
+	dh_installman
+	dh_link
+	dh_strip
+	dh_compress
+	dh_fixperms
+# dh_perl
+	dh_makeshlibs
+	dh_installdeb
+	dh_shlibdeps
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+.PHONY: build clean binary-indep binary-arch binary install configure
