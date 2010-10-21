@@ -5,7 +5,7 @@
 #include <sstream>
 using namespace std ;
 
-#include <qm/log>
+#include <qmlog.h>
 
 #include <iodata/iodata>
 
