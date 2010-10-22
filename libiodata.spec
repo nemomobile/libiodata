@@ -7,7 +7,7 @@ Group:   System/Libraries
 License: LGPLv2
 URL:     http://meego.gitorious.org/meego-middleware/iodata
 Source0: %{_name}-%{version}.tar.bz2
-Patch0:  %{name}-linklibs.patch
+Patch0:  %{name}-0.0.13-linklibs.patch
 
 BuildRequires: pkgconfig(QtCore) >= 4.5
 BuildRequires: bison
