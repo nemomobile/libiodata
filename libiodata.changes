@@ -1,2 +1,7 @@
+* Wed Nov 24 2010 Tapio Rantala <ext-tapio.rantala@nokia.com> 0.0.15-1
+- New upstream version
+- Drop linklibs patch, not needed anymore
+- Conforms to upstream version 0.0.15-a
+
 * Mon Aug 23 2010 Tapio Rantala <ext-tapio.rantala@nokia.com> 0.0.13-1
 - Initial meego packaging
