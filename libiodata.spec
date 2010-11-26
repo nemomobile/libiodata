@@ -28,6 +28,7 @@ Provides header files for iodata library.
 %package tests
 Summary:  Testcases for iodata library
 Group:    Development/System
+Requires: testrunner-lite
 
 %description tests
 %{summary}.
