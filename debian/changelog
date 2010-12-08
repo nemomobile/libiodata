@@ -1,3 +1,9 @@
+iodata (0.0.16) unstable; urgency=low
+
+  * export read_file_to_string()
+
+ -- Ilya Dogolazky <ilya.dogolazky@nokia.com>  Wed, 08 Dec 2010 18:24:51 +0200
+
 iodata (0.0.15) unstable; urgency=low
 
   * Fixes: NB#187227

@@ -61,10 +61,10 @@ public:
   int source() { return data_source ; }
   bool fix_files(bool force) ;
 
+  static int read_file_to_string(const char *file, string &input) ;
 private:
   int move_files(int index_from, int index_to) ;
   int write_string_to_file(int index, const string &data) ;
-  static int read_file_to_string(const char *file, string &input) ;
 
   record *parse_string_to_tree(std::string &message) ;
 } ;
