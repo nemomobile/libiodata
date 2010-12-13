@@ -1,8 +1,9 @@
 iodata (0.0.16) unstable; urgency=low
 
   * export read_file_to_string()
+  * fixed a memory leak
 
- -- Ilya Dogolazky <ilya.dogolazky@nokia.com>  Wed, 08 Dec 2010 18:24:51 +0200
+ -- Ilya Dogolazky <ilya.dogolazky@nokia.com>  Tue, 14 Dec 2010 00:15:01 +0200
 
 iodata (0.0.15) unstable; urgency=low
 
