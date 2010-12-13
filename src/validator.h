@@ -175,6 +175,7 @@ namespace iodata
     void push_length(unsigned value) { length.push_back(value) ; }
   public:
     output(ostream &stream, int indent=2, int width=80) ;
+   ~output() ;
     void output_record(record *r) ;
   } ;
 }

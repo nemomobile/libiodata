@@ -25,7 +25,7 @@
 #include <iostream>
 using namespace std ;
 
-#include <QDebug>
+#include <qmlog>
 
 #include "iodata.h"
 #include "validator.h"
@@ -527,6 +527,13 @@ iodata::output::output(ostream &stream, int indent, int width)
   allocated=0 ;
   alloc_step=1024 ;
   hard_reset() ;
+  log_debug("iodata::output::constructor %p", this) ;
+}
+
+iodata::output::~output()
+{
+  log_debug("iodata::output::destructor %p buffer=%p", this, buffer) ;
+  free(buffer) ;
 }
 
 void iodata::output::hard_reset()
