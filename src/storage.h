@@ -46,10 +46,12 @@ private:
   std::vector<std::string> path ;
 
   iodata::validator *type_validator ;
+  bool validator_owned ;
   std::string type_name ;
 
 public:
   storage() ;
+ ~storage() ;
 
   void set_primary_path(const std::string &) ;
   void set_secondary_path(const std::string &) ;

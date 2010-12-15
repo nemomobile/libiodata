@@ -42,6 +42,13 @@ storage::storage()
 {
   data_source = -1 ;
   type_validator = NULL ;
+  validator_owned = false ;
+}
+
+storage::~storage()
+{
+  if (validator_owned and type_validator)
+    delete type_validator ;
 }
 
 void storage::set_primary_path(const string &file)
@@ -61,13 +68,16 @@ void storage::set_secondary_path(const string &file)
 void storage::set_validator(const string &path, const string &name)
 {
   log_assert(!name.empty()) ;
+  log_assert(type_validator==NULL) ;
   type_name = name ;
   type_validator = validator::from_file(path.c_str()) ;
+  validator_owned = true ;
 }
 
 void storage::set_validator(validator *v, const string &name)
 {
   log_assert(!name.empty()) ;
+  log_assert(type_validator==NULL) ;
   type_name = name ;
   type_validator = v ;
 }
