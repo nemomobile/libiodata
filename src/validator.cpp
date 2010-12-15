@@ -30,6 +30,19 @@ using namespace std ;
 #include "iodata.h"
 #include "validator.h"
 
+iodata::validator::validator()
+{
+  static bool first = true ;
+  if(first)
+    init_type_codec(), first=false ;
+}
+iodata::validator::~validator()
+{
+  log_debug("deleting validator::types") ;
+  for(map<string,record_type*>::iterator it=types.begin(); it!=types.end(); ++it)
+    delete it->second ;
+}
+
 void iodata::validator::check_record(record *p, const record_type *r, bool write)
 {
   item *items[r->nodes.size()+1] ; // '+1' is used just for the case N=0

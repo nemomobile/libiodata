@@ -95,7 +95,9 @@ namespace iodata
     static validator* from_file(const char *path) ;
     iodata::record *record_from_file(const char *path, const char *record_type, string &message) ;
     bool record_to_file(const char *path, const char *record_type, iodata::record *data, string &serialized) ;
-    validator()
+    validator() ;
+   ~validator() ;
+#if 0
     {
       static bool first = true ;
       if(first)
@@ -105,6 +107,7 @@ namespace iodata
       screen_width = 80 ;
 #endif
     }
+#endif
     map<string, record_type*> types ;
     void load(const record *lang) ;
     void link() ;
