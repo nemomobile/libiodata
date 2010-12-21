@@ -86,6 +86,7 @@ namespace iodata
   {
     integer_t x ;
     integer(integer_t xx) : x(xx) { } ;
+    virtual ~integer() { }
     void plain_output(ostream &os, const string &prefix) const ;
     bool is_leaf() { return true ; }
     static const char *static_class_name() { return "iodata::integer" ; }
@@ -102,6 +103,7 @@ namespace iodata
     bitmask() { xl=0 ; }
     bitmask(const bitmask &y) : xl(y.xl), xs(y.xs) { }
     bitmask(bitmask_t value, const bit_codec *codec) { assign(value,codec) ; }
+    virtual ~bitmask() { }
     bitmask_t value(const bit_codec *codec) const ;
     void add(bitmask_t bits) { xl|=bits ; }
     void add(string name) { xs.insert(name) ; }
@@ -116,6 +118,7 @@ namespace iodata
   {
     string x ;
     bytes(const string xx) : x(xx) { } ;
+    virtual ~bytes() { }
     void output(ostream &os) const ;
     void plain_output(ostream &os, const string &prefix) const ;
     bool is_leaf() { return true ; }
