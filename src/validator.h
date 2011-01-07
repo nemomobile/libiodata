@@ -75,7 +75,7 @@ namespace iodata
   {
     if(T *p_cast = dynamic_cast<T*> (p))
       return p_cast ;
-    throw exception((string)T::static_class_name()+ "expected, but "+p->class_name()+" found") ;
+    throw exception((string)T::static_class_name()+ " expected, but "+p->class_name()+" found") ;
   }
 
   struct validator

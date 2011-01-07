@@ -249,7 +249,7 @@ namespace iodata
   {
     if(const T *p_cast = dynamic_cast<const T*> (p))
       return p_cast ;
-    throw exception((string)T::static_class_name()+ "expected, but "+p->class_name()+" found") ;
+    throw exception((string)T::static_class_name()+ " expected, but "+p->class_name()+" found") ;
   }
 
   inline  const record *item::rec() const { return cast_and_check_const<record>(this) ; }
