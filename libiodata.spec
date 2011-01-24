@@ -1,9 +1,9 @@
 %define _name iodata
 Name:     libiodata
-Version:  0.0.15
+Version:  0.0.16
 Release:  1
 Summary:  Library for input/ouput data
-Group:    System/Libraries
+Group:    System/System Control
 License:  LGPLv2
 URL:      http://meego.gitorious.org/meego-middleware/iodata
 Source0:  %{_name}-%{version}.tar.bz2
@@ -37,11 +37,11 @@ Requires: testrunner-lite
 %setup -q -n %{_name}-%{version}
 
 %build
-qmake
+%qmake
 make
 
 %install
-make INSTALL_ROOT=%{buildroot} install
+%qmake_install
 install -d %{buildroot}/%{_datadir}/%{name}-tests/
 mv %{buildroot}/%{_datadir}/%{_name}-tests/tests.xml %{buildroot}/%{_datadir}/%{name}-tests/tests.xml
 

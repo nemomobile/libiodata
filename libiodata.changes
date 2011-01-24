@@ -1,5 +1,8 @@
+* Fri Jan 21 2011 Tapio Rantala <ext-tapio.rantala@nokia.com> 0.0.16-1
+- New upstream version (BMC#10590)
+
 * Wed Nov 24 2010 Tapio Rantala <ext-tapio.rantala@nokia.com> 0.0.15-1
-- New upstream version
+- New upstream version (BMC#10590)
 - Drop linklibs patch, not needed anymore
 - Conforms to upstream version 0.0.15-a
 
