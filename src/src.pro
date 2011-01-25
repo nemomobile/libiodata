@@ -1,4 +1,4 @@
-VERSION = 0.0.17
+VERSION = 0.$$(IODATA_VERSION)
 TEMPLATE=lib
 QT -= gui
 

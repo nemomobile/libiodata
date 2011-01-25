@@ -1,3 +1,4 @@
+VERSION = $$(IODATA_VERSION)
 TEMPLATE = app
 QT -= Gui
 TARGET = iodata-test

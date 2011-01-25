@@ -2,6 +2,7 @@
 # -*- makefile -*-
 
 export DH_VERBOSE=1
+export IODATA_VERSION=$(shell head -n1 debian/changelog | sed "s/.*(\([^)+]*\).*/\1/")
 
 configure: configure-stamp
 configure-stamp:
@@ -12,7 +13,7 @@ configure-stamp:
 build: build-stamp
 build-stamp: configure-stamp
 	dh_testdir
-	qmake && make
+	qmake-qt4 && make
 	touch build-stamp
 
 clean:

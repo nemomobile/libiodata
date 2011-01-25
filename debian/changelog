@@ -1,8 +1,9 @@
-iodata (0.0.17) unstable; urgency=low
+iodata (0.17) unstable; urgency=low
 
-  * new
+  * using qt4 qmake
+  * taking version number from changelog
 
- -- Ilya Dogolazky <ilya.dogolazky@nokia.com>  Mon, 27 Dec 2010 13:55:41 +0200
+ -- Ilya Dogolazky <ilya.dogolazky@nokia.com>  Tue, 25 Jan 2011 21:48:33 +0200
 
 iodata (0.0.16) unstable; urgency=low
 
