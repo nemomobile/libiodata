@@ -59,7 +59,7 @@ void dump_cpp(ostringstream &cpp, const string &full_name, iodata::validator *v)
 
 int main(int ac, char **av)
 {
-  for (int i=1; i<=ac; ++i)
+  for (int i=1; i<ac; ++i)
   {
     cout << "// " << av[i] << endl ;
     iodata::validator *v = iodata::validator::from_file(av[i]) ;
