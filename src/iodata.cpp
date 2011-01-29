@@ -25,6 +25,13 @@
 
 namespace iodata
 {
+  bitmask::bitmask(bitmask_t literal, const char **symbolics)
+  {
+    xl = literal ;
+    for (const char **p=symbolics; *p; ++p)
+      xs.insert(*p) ;
+  }
+
   void bitmask::assign(bitmask_t value, const bit_codec *codec)
   {
     xl = codec ? codec->encode(value, xs) : value ;

@@ -103,6 +103,7 @@ namespace iodata
     bitmask() { xl=0 ; }
     bitmask(const bitmask &y) : xl(y.xl), xs(y.xs) { }
     bitmask(bitmask_t value, const bit_codec *codec) { assign(value,codec) ; }
+    bitmask(bitmask_t literal, const char *symbolics[]) ;
     virtual ~bitmask() { }
     bitmask_t value(const bit_codec *codec) const ;
     void add(bitmask_t bits) { xl|=bits ; }
