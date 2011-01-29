@@ -108,6 +108,7 @@ namespace iodata
     bitmask_t value(const bit_codec *codec) const ;
     void add(bitmask_t bits) { xl|=bits ; }
     void add(string name) { xs.insert(name) ; }
+    bool bit_present(const string &name) const { return xs.count(name)>0 ; }
     void assign(bitmask_t value, const bit_codec *codec) ;
     void plain_output(ostream &os, const string &prefix) const ;
     bool is_leaf() { return true ; }

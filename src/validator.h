@@ -50,6 +50,7 @@ namespace iodata
   } ;
 
   struct record_type ;
+#if 0
   struct node ;
 
   struct node
@@ -62,6 +63,58 @@ namespace iodata
     record_type *type ;
     string type_name ;
   } ;
+#else
+  struct node ;
+  struct node_integer ;
+  struct node_bytes ;
+  struct node_bitmask ;
+  struct node_record ;
+
+  struct node
+  {
+    string name ;
+    bool is_array, is_mandatory ;
+    node(const string &n, bool a, bool m) : name(n), is_array(a), is_mandatory(m) { }
+    virtual ~node() { }
+    virtual bool is_integer() const { return false ; }
+    virtual bool is_bytes() const { return false ; }
+    virtual bool is_bitmask() const { return false ; }
+    virtual bool is_record() const { return false ; }
+  } ;
+
+  struct node_integer : public node
+  {
+    int32_t value ;
+    node_integer(const string &n, bool a, bool m, int32_t v) : node(n,a,m), value(v) { }
+   ~node_integer() { }
+    bool is_integer() const { return true ; }
+  } ;
+
+  struct node_bytes : public node
+  {
+    string value ;
+    node_bytes(const string &n, bool a, bool m, const string &v) : node(n,a,m), value(v) { }
+   ~node_bytes() { }
+    bool is_bytes() const { return true ; }
+  } ;
+
+  struct node_bitmask : public node
+  {
+    bitmask value ;
+    node_bitmask(const string &n, bool a, bool m, const bitmask &v) : node(n,a,m), value(v) { }
+   ~node_bitmask() { }
+    bool is_bitmask() const { return true ; }
+  } ;
+
+  struct node_record : public node
+  {
+    string type_name ;
+    record_type *type ;
+    node_record(const string &n, bool a, bool m, const string &tn) : node(n,a,m), type_name(tn) { type = NULL ; }
+   ~node_record() { }
+    bool is_record() const { return true ; }
+  } ;
+#endif
 
   struct record_type
   {
@@ -90,8 +143,10 @@ namespace iodata
      ~exception() throw() { }
     } ;
 
+#if 0
     static bit_codec type_codec ;
     static void init_type_codec() ;
+#endif
     static validator* from_file(const char *path) ;
     iodata::record *record_from_file(const char *path, const char *record_type, string &message) ;
     bool record_to_file(const char *path, const char *record_type, iodata::record *data, string &serialized) ;

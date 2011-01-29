@@ -32,9 +32,11 @@ using namespace std ;
 
 iodata::validator::validator()
 {
+#if 0
   static bool first = true ;
   if(first)
     init_type_codec(), first=false ;
+#endif
 }
 iodata::validator::~validator()
 {
@@ -92,7 +94,7 @@ void iodata::validator::check_fields(record *p, const record_type *r, bool add_d
     const node *n = r->nodes[i] ;
     if(items[i]==NULL) // field is not present
     {
-      if(n->flag & MANDATORY) // but it's mandatory!
+      if(n->is_mandatory) // but it's mandatory!
       {
         if(missed_fields)
           *missed_fields += ", ", *missed_fields += n->name ;
@@ -102,14 +104,27 @@ void iodata::validator::check_fields(record *p, const record_type *r, bool add_d
       }
       else if(add_defaults) // use the default value
       {
+        if (not n->is_array)
+        {
+#if 0
 #define _append(bit, type) if((n->flag&(bit|ARRAY))==bit) items[i] = p->x[n->name] = new type(n->type##_value) ;
-        _append(BITMASK, bitmask) ;
-        _append(INTEGER, integer) ;
-        _append(BYTES, bytes) ;
+#else
+#define _append(bit, type) if(n->is_##type() and not n->is_array) items[i] = p->x[n->name] = new type(dynamic_cast<const node_##type*>(n)->value) ;
+#endif
+          _append(BITMASK, bitmask) ;
+          _append(INTEGER, integer) ;
+          _append(BYTES, bytes) ;
 #undef _append
+#if 0
 #define _append_empty(bit, type) if((n->flag&(bit|ARRAY))==bit) items[i] = p->x[n->name] = new type  ;
-        _append_empty(ARRAY, array) ;
-        _append_empty(RECORD, record) ;
+#else
+#define _append_empty(bit, type) items[i] = p->x[n->name] = new type ;
+#endif
+          if (n->is_record())
+            _append_empty(RECORD, record) ;
+        }
+        else
+          _append_empty(ARRAY, array) ;
 #undef _append_empty
 
       }
@@ -118,7 +133,11 @@ void iodata::validator::check_fields(record *p, const record_type *r, bool add_d
     {
       try
       {
+#if 0
 #define _check(bit, type) if((n->flag&(bit|ARRAY))==bit) cast_and_check<type>(items[i])
+#else
+#define _check(bit, type) if(n->is_##type() and not n->is_array) cast_and_check<type>(items[i]) ;
+#endif
         _check(BITMASK, bitmask) ;
         _check(INTEGER, integer) ;
         _check(BYTES, bytes);
@@ -144,17 +163,19 @@ void iodata::validator::check_children(record * /*p*/, const record_type *r, boo
   {
     if(items[i]==NULL)
       continue ;
-    int f = r->nodes[i]->flag ;
-    if((f&(ARRAY|RECORD))==0)
+    // int f = r->nodes[i]->flag ;
+    const node *n = r->nodes[i] ;
+    if (not n->is_array and not n->is_record())
       continue ;
-    int element_type = f & (RECORD|INTEGER|BITMASK|BYTES) ;
-    if(f&ARRAY)
+    // int element_type = f & (RECORD|INTEGER|BITMASK|BYTES) ;
+    if (n->is_array)
     {
       array *pa = cast_and_check<array> (items[i]) ;
       for(unsigned j=0; j<pa->x.size(); ++j)
       {
         try
         {
+#if 0
           switch(element_type)
           {
             default: throw exception((string)"internal error in"+__PRETTY_FUNCTION__) ;
@@ -163,6 +184,16 @@ void iodata::validator::check_children(record * /*p*/, const record_type *r, boo
             case BYTES:   cast_and_check<bytes> (pa->x[j]) ; break ;
             case RECORD:  check_record(cast_and_check<record>(pa->x[j]), r->nodes[i]->type, write) ;
           }
+#else
+          if (n->is_integer())
+            cast_and_check<integer> (pa->x[j]) ;
+          if (n->is_bytes())
+            cast_and_check<bytes> (pa->x[j]) ;
+          if (n->is_bitmask())
+            cast_and_check<bitmask> (pa->x[j]) ;
+          if (n->is_record())
+            check_record(cast_and_check<record>(pa->x[j]), dynamic_cast<const node_record*>(n)->type, write) ;
+#endif
         }
         catch(exception &e)
         {
@@ -171,7 +202,7 @@ void iodata::validator::check_children(record * /*p*/, const record_type *r, boo
       }
     }
     else // it's a record, because it's not an array
-      check_record(cast_and_check<record>(items[i]), r->nodes[i]->type, write) ;
+      check_record(cast_and_check<record>(items[i]), dynamic_cast<const node_record*>(n)->type, write) ;
   }
 }
 
@@ -181,9 +212,11 @@ void iodata::validator::check_defaults(record *p, const record_type *r, item *it
   {
     if(items[i]==NULL)
       continue ;
-    int f = r->nodes[i]->flag ;
-    if(f & MANDATORY)
+    // int f = r->nodes[i]->flag ;
+    const node *n = r->nodes[i] ;
+    if (n->is_mandatory)
       continue ;
+#if 0
     if(f & ARRAY)
       f = ARRAY ;
     bool flag = false ;
@@ -196,6 +229,21 @@ void iodata::validator::check_defaults(record *p, const record_type *r, item *it
       case BYTES: flag = cast_and_check<bytes>(items[i])->x==r->nodes[i]->bytes_value ; break ;
       case BITMASK: flag = *cast_and_check<bitmask>(items[i])==r->nodes[i]->bitmask_value ; break ;
     }
+#else
+    bool flag = false ;
+    if (n->is_array)
+      flag = cast_and_check<array>(items[i])->x.size()==0 ;
+    else if (n->is_record())
+      flag = cast_and_check<record>(items[i])->x.size() == 0 ;
+    else if (n->is_integer())
+      flag = cast_and_check<integer>(items[i])->x == dynamic_cast<const node_integer *> (n)->value ;
+    else if (n->is_bytes())
+      flag = cast_and_check<bytes>(items[i])->x == dynamic_cast<const node_bytes *> (n)->value ;
+    else if (n->is_bitmask())
+      flag = *cast_and_check<bitmask>(items[i]) == dynamic_cast<const node_bitmask *> (n)->value ;
+    else
+      throw exception((string)"internal error in"+__PRETTY_FUNCTION__) ;
+#endif
     if(flag)
     {
       delete items[i] ;
@@ -220,29 +268,29 @@ void iodata::validator::load(const record *lang)
     for(unsigned i=0; i<N; ++i)
     {
       const record *r = dynamic_cast<const record *> (ap->x[i]) ;
-      node *n = t->nodes[i] = new node ;
-      const bytes *item_name = dynamic_cast<const bytes*> (r->x.find("name")->second) ;
       const bitmask *item_type = dynamic_cast<const bitmask*> (r->x.find("type")->second) ;
-      n->flag = (validator_flag) (unsigned) item_type->value(&type_codec) ;
-      n->name = item_name->x ;
-      n->type = NULL ;
-      if(n->flag & RECORD)
-        n->type_name = dynamic_cast<const bytes*> (r->x.find("record")->second)->x ;
-      map<string,item*>::const_iterator value_it = r->x.find("value") ;
-      if(value_it!=r->x.end())
-      {
-        const item *value_item = value_it->second ;
-        if(n->flag & INTEGER)
-          n->integer_value = dynamic_cast<const integer *> (value_item) -> x ;
-        if(n->flag & BYTES)
-          n->bytes_value = dynamic_cast<const bytes *> (value_item) -> x ;
-        if(n->flag & BITMASK)
-          n->bitmask_value = * dynamic_cast<const bitmask *> (value_item) ;
-      }
+      bool item_is_mandatory = item_type->bit_present("mandatory") ;
+      bool item_is_array = item_type->bit_present("array") ;
+      map<string,item*>::const_iterator value_iterator = r->x.find("value") ;
+      const item *value_item = value_iterator==r->x.end() ? NULL : value_iterator->second ;
+      string item_name = dynamic_cast<const bytes*> (r->x.find("name")->second) -> x ;
+
+      node *n = NULL ;
+      if (item_type->bit_present("integer"))
+        n = new node_integer(item_name, item_is_array, item_is_mandatory, value_item ? dynamic_cast<const integer *> (value_item) -> x : 0) ;
+      if (item_type->bit_present("bytes"))
+        n = new node_bytes(item_name, item_is_array, item_is_mandatory, value_item ? dynamic_cast<const bytes *> (value_item) -> x : "") ;
+      if (item_type->bit_present("bitmask"))
+        n = new node_bitmask(item_name, item_is_array, item_is_mandatory, value_item ? * dynamic_cast<const bitmask *> (value_item) : bitmask()) ;
+      if (item_type->bit_present("record"))
+        n = new node_record(item_name, item_is_array, item_is_mandatory, dynamic_cast<const bytes*> (r->x.find("record")->second)->x) ;
+      log_assert(n) ;
+      t->nodes[i] = n ;
     }
   }
 }
 
+#if 0
 iodata::bit_codec iodata::validator::type_codec ;
 
 void iodata::validator::init_type_codec()
@@ -254,6 +302,7 @@ void iodata::validator::init_type_codec()
   type_codec.register_name(BYTES, "bytes") ;
   type_codec.register_name(MANDATORY, "mandatory") ;
 }
+#endif
 
 void iodata::validator::link()
 {
@@ -263,13 +312,14 @@ void iodata::validator::link()
     for(vector<node*>::iterator nn=t->second->nodes.begin(); nn!=t->second->nodes.end(); ++nn)
     {
       node *n = *nn ;
-      if(n->flag & RECORD)
+      if (node_record *nr = dynamic_cast<node_record*> (n))
       {
-        if(n->type)
+        assert(n->is_record()) ; // paranoia
+        if (nr->type)
           continue ;
-        map<string,record_type*>::iterator res = types.find(n->type_name) ;
+        map<string,record_type*>::iterator res = types.find(nr->type_name) ;
         assert(res!=types.end()) ;
-        n->type = res->second ;
+        nr->type = res->second ;
       }
     }
   }
