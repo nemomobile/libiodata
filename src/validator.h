@@ -80,6 +80,7 @@ namespace iodata
     virtual bool is_bytes() const { return false ; }
     virtual bool is_bitmask() const { return false ; }
     virtual bool is_record() const { return false ; }
+    virtual const char *node_name() const = 0 ;
   } ;
 
   struct node_integer : public node
@@ -88,6 +89,7 @@ namespace iodata
     node_integer(const string &n, bool a, bool m, int32_t v) : node(n,a,m), value(v) { }
    ~node_integer() { }
     bool is_integer() const { return true ; }
+    const char *node_name() const { return "node_integer" ; }
   } ;
 
   struct node_bytes : public node
@@ -96,6 +98,7 @@ namespace iodata
     node_bytes(const string &n, bool a, bool m, const string &v) : node(n,a,m), value(v) { }
    ~node_bytes() { }
     bool is_bytes() const { return true ; }
+    const char *node_name() const { return "node_bytes" ; }
   } ;
 
   struct node_bitmask : public node
@@ -104,6 +107,7 @@ namespace iodata
     node_bitmask(const string &n, bool a, bool m, const bitmask &v) : node(n,a,m), value(v) { }
    ~node_bitmask() { }
     bool is_bitmask() const { return true ; }
+    const char *node_name() const { return "node_bitmask" ; }
   } ;
 
   struct node_record : public node
@@ -113,6 +117,7 @@ namespace iodata
     node_record(const string &n, bool a, bool m, const string &tn) : node(n,a,m), type_name(tn) { type = NULL ; }
    ~node_record() { }
     bool is_record() const { return true ; }
+    const char *node_name() const { return "node_record" ; }
   } ;
 #endif
 

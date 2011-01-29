@@ -11,7 +11,7 @@ LIBS += -liodata
 QMAKE_LIBDIR_FLAGS += -L../src
 INCLUDEPATH += ../H
 
-SOURCES = .cpp
+SOURCES = dumper.cpp
 
 target.path = /usr/bin
 
