@@ -47,8 +47,9 @@ void iodata::validator::check_record(record *p, const record_type *r, bool write
 {
   item *items[r->nodes.size()+1] ; // '+1' is used just for the case N=0
   unsigned N=0, not_present=0 ;
-  for(vector<node>::const_iterator n=r->nodes.begin(); n!=r->nodes.end(); ++n)
+  for(vector<node*>::const_iterator pn=r->nodes.begin(); pn!=r->nodes.end(); ++pn)
   {
+    node *n = *pn ;
     map<string,item*>::iterator it = p->x.find(n->name) ;
     items[N++] = (it==p->x.end()) ? ++not_present, (item*)NULL : it->second ;
   }
@@ -70,8 +71,8 @@ void iodata::validator::check_unknown_fields(record *p, const record_type *r)
   for(map<string,item*>::iterator p_it=p->x.begin(); p_it!=p->x.end(); ++p_it)
   {
     bool found = false ;
-    for(vector<node>::const_iterator r_it=r->nodes.begin(); !found && r_it!=r->nodes.end(); ++r_it)
-      found = r_it->name == p_it->first ;
+    for(vector<node*>::const_iterator r_it=r->nodes.begin(); !found && r_it!=r->nodes.end(); ++r_it)
+      found = (*r_it)->name == p_it->first ;
     if(found)
       continue ;
     if(counter++)
@@ -88,7 +89,7 @@ void iodata::validator::check_fields(record *p, const record_type *r, bool add_d
 
   for(unsigned i=0; i<N; ++i)
   {
-    const node *n = &r->nodes[i] ;
+    const node *n = r->nodes[i] ;
     if(items[i]==NULL) // field is not present
     {
       if(n->flag & MANDATORY) // but it's mandatory!
@@ -137,13 +138,13 @@ void iodata::validator::check_fields(record *p, const record_type *r, bool add_d
   }
 }
 
-void iodata::validator::check_children(record *p, const record_type *r, bool write, item *items[], unsigned N)
+void iodata::validator::check_children(record * /*p*/, const record_type *r, bool write, item *items[], unsigned N)
 {
   for(unsigned i=0; i<N; ++i)
   {
     if(items[i]==NULL)
       continue ;
-    int f = r->nodes[i].flag ;
+    int f = r->nodes[i]->flag ;
     if((f&(ARRAY|RECORD))==0)
       continue ;
     int element_type = f & (RECORD|INTEGER|BITMASK|BYTES) ;
@@ -160,17 +161,17 @@ void iodata::validator::check_children(record *p, const record_type *r, bool wri
             case BITMASK: cast_and_check<bitmask> (pa->x[j]) ; break ;
             case INTEGER: cast_and_check<integer> (pa->x[j]) ; break ;
             case BYTES:   cast_and_check<bytes> (pa->x[j]) ; break ;
-            case RECORD:  check_record(cast_and_check<record>(pa->x[j]), r->nodes[i].type, write) ;
+            case RECORD:  check_record(cast_and_check<record>(pa->x[j]), r->nodes[i]->type, write) ;
           }
         }
         catch(exception &e)
         {
-          throw e.prepend_index(j).prepend_path(r->nodes[i].name) ;
+          throw e.prepend_index(j).prepend_path(r->nodes[i]->name) ;
         }
       }
     }
     else // it's a record, because it's not an array
-      check_record(cast_and_check<record>(items[i]), r->nodes[i].type, write) ;
+      check_record(cast_and_check<record>(items[i]), r->nodes[i]->type, write) ;
   }
 }
 
@@ -180,7 +181,7 @@ void iodata::validator::check_defaults(record *p, const record_type *r, item *it
   {
     if(items[i]==NULL)
       continue ;
-    int f = r->nodes[i].flag ;
+    int f = r->nodes[i]->flag ;
     if(f & MANDATORY)
       continue ;
     if(f & ARRAY)
@@ -191,15 +192,15 @@ void iodata::validator::check_defaults(record *p, const record_type *r, item *it
       default: throw exception((string)"internal error in"+__PRETTY_FUNCTION__) ;
       case ARRAY: flag = cast_and_check<array>(items[i])->x.size()==0 ; break ;
       case RECORD: flag = cast_and_check<record>(items[i])->x.size()==0 ; break ;
-      case INTEGER: flag = cast_and_check<integer>(items[i])->x==r->nodes[i].integer_value ; break ;
-      case BYTES: flag = cast_and_check<bytes>(items[i])->x==r->nodes[i].bytes_value ; break ;
-      case BITMASK: flag = *cast_and_check<bitmask>(items[i])==r->nodes[i].bitmask_value ; break ;
+      case INTEGER: flag = cast_and_check<integer>(items[i])->x==r->nodes[i]->integer_value ; break ;
+      case BYTES: flag = cast_and_check<bytes>(items[i])->x==r->nodes[i]->bytes_value ; break ;
+      case BITMASK: flag = *cast_and_check<bitmask>(items[i])==r->nodes[i]->bitmask_value ; break ;
     }
     if(flag)
     {
       delete items[i] ;
       items[i] = NULL ;
-      p->x.erase(r->nodes[i].name) ;
+      p->x.erase(r->nodes[i]->name) ;
     }
   }
 }
@@ -219,24 +220,24 @@ void iodata::validator::load(const record *lang)
     for(unsigned i=0; i<N; ++i)
     {
       const record *r = dynamic_cast<const record *> (ap->x[i]) ;
-      node &n = t->nodes[i] ;
+      node *n = t->nodes[i] = new node ;
       const bytes *item_name = dynamic_cast<const bytes*> (r->x.find("name")->second) ;
       const bitmask *item_type = dynamic_cast<const bitmask*> (r->x.find("type")->second) ;
-      n.flag = (validator_flag) (unsigned) item_type->value(&type_codec) ;
-      n.name = item_name->x ;
-      n.type = NULL ;
-      if(n.flag & RECORD)
-        n.type_name = dynamic_cast<const bytes*> (r->x.find("record")->second)->x ;
+      n->flag = (validator_flag) (unsigned) item_type->value(&type_codec) ;
+      n->name = item_name->x ;
+      n->type = NULL ;
+      if(n->flag & RECORD)
+        n->type_name = dynamic_cast<const bytes*> (r->x.find("record")->second)->x ;
       map<string,item*>::const_iterator value_it = r->x.find("value") ;
       if(value_it!=r->x.end())
       {
         const item *value_item = value_it->second ;
-        if(n.flag & INTEGER)
-          n.integer_value = dynamic_cast<const integer *> (value_item) -> x ;
-        if(n.flag & BYTES)
-          n.bytes_value = dynamic_cast<const bytes *> (value_item) -> x ;
-        if(n.flag & BITMASK)
-          n.bitmask_value = * dynamic_cast<const bitmask *> (value_item) ;
+        if(n->flag & INTEGER)
+          n->integer_value = dynamic_cast<const integer *> (value_item) -> x ;
+        if(n->flag & BYTES)
+          n->bytes_value = dynamic_cast<const bytes *> (value_item) -> x ;
+        if(n->flag & BITMASK)
+          n->bitmask_value = * dynamic_cast<const bitmask *> (value_item) ;
       }
     }
   }
@@ -259,7 +260,9 @@ void iodata::validator::link()
   for(map<string,record_type*>::iterator t=types.begin(); t!=types.end(); ++t)
   {
     assert(t->first==t->second->name) ;
-    for(vector<node>::iterator n=t->second->nodes.begin(); n!=t->second->nodes.end(); ++n)
+    for(vector<node*>::iterator nn=t->second->nodes.begin(); nn!=t->second->nodes.end(); ++nn)
+    {
+      node *n = *nn ;
       if(n->flag & RECORD)
       {
         if(n->type)
@@ -268,6 +271,7 @@ void iodata::validator::link()
         assert(res!=types.end()) ;
         n->type = res->second ;
       }
+    }
   }
 }
 

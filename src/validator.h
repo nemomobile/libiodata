@@ -66,7 +66,7 @@ namespace iodata
   struct record_type
   {
     string name ;
-    vector<node> nodes ;
+    vector<node*> nodes ;
   } ;
 
 
