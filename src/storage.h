@@ -64,9 +64,10 @@ public:
   bool fix_files(bool force) ;
 
   static int read_file_to_string(const char *file, string &input) ;
+  static int write_string_to_file(const char *file, const string &data) ;
 private:
   int move_files(int index_from, int index_to) ;
-  int write_string_to_file(int index, const string &data) ;
+  int write_string(int index, const string &data) ;
 
   record *parse_string_to_tree(std::string &message) ;
 } ;

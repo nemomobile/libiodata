@@ -199,7 +199,7 @@ int storage::save(record *rec)
 
   if(no_data_on_disk || no_secondary || data_in_secondary)
   {
-    int res = write_string_to_file(0, new_data) ;
+    int res = write_string(0, new_data) ;
     if(res<0)
     {
       log_critical("can't write data to '%s': %m", path_0) ;
@@ -234,7 +234,7 @@ int storage::save(record *rec)
 
   const char *path_i = index==0 ? path_0 : path_1 ;
 
-  int res = write_string_to_file(index, new_data) ;
+  int res = write_string(index, new_data) ;
 
   if(res<0)
   {
@@ -298,7 +298,7 @@ bool storage::fix_files(bool force)
 
   // now just write the cached data to primary
 
-  if(write_string_to_file(0, data_cached)<0)
+  if(write_string(0, data_cached)<0)
     return false ;
 
   data_source = 0 ;
@@ -331,10 +331,14 @@ int storage::move_files(int from, int to)
   return rename(path_from, path_to) ;
 }
 
-int storage::write_string_to_file(int index, const string &data)
+int storage::write_string(int index, const string &data)
 {
   const char *file = path[index].c_str() ;
+  return write_string_to_file(file, data) ;
+}
 
+int storage::write_string_to_file(const char *file, const string &data)
+{
   int fd = open(file, O_WRONLY|O_CREAT|O_TRUNC, 0666) ;
 
   if(fd < 0)
