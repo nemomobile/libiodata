@@ -258,9 +258,26 @@ void iodata::validator::load(const record *lang)
   typedef map<string, item*>::const_iterator iterator ;
   for(iterator it=lang->x.begin(); it!=lang->x.end(); ++it)
   {
+    if (it->first=="_function")
+    {
+      v_function = dynamic_cast<const bytes*> (it->second) -> x ;
+      continue ;
+    }
+
     const array *ap = dynamic_cast<const array*> (it->second) ;
     unsigned N = ap->x.size() ;
     // assert(N>0) ; // WHY >0 ? Empty type is okey?
+
+    if (it->first=="_namespace")
+    {
+      for(unsigned i=0; i<N; ++i)
+      {
+        string word = dynamic_cast<const bytes *> (ap->x[i]) -> x ;
+        v_namespace.push_back(word) ;
+      }
+      continue ;
+    }
+
     assert(types.find(it->first)==types.end()) ;
     record_type *t = types[it->first] = new record_type ;
     t->name = it->first ;

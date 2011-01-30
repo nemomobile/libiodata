@@ -114,7 +114,7 @@ namespace iodata
   {
     string type_name ;
     record_type *type ;
-    node_record(const string &n, bool a, bool m, const string &tn) : node(n,a,m), type_name(tn) { type = NULL ; }
+    node_record(const string &n, bool a, bool m, const string &tn, record_type *t=NULL) : node(n,a,m), type_name(tn) { type = t ; }
    ~node_record() { }
     bool is_record() const { return true ; }
     const char *node_name() const { return "node_record" ; }
@@ -138,6 +138,9 @@ namespace iodata
 
   struct validator
   {
+    vector<string> v_namespace ;
+    string v_function ;
+
     struct exception : public iodata::exception
     {
       string node_path ;
