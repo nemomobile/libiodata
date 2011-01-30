@@ -106,7 +106,6 @@ void dump_cpp(ostringstream &cpp, iodata::validator *v)
 int main_try(int ac, char **av)
 {
   qmlog::enable() ;
-  log_debug() ;
   string c_output, h_output ;
   vector<string> input ;
 
@@ -163,13 +162,11 @@ int main_try(int ac, char **av)
   if (h_output.empty() and input.size()==1)
     h_output = input[0] + ".h" ;
 
-  log_debug() ;
   ostringstream cpp, h ;
   for (unsigned i=0; i<input.size(); ++i)
   {
-    log_notice("processing input file: '%s'", input[i].c_str()) ;
+    // log_notice("processing input file: '%s'", input[i].c_str()) ;
     iodata::validator *v = iodata::validator::from_file(input[i].c_str()) ;
-    log_debug() ;
     dump_cpp(cpp, v) ;
     dump_h(h, v) ;
   }
