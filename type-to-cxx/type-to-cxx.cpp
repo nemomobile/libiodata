@@ -124,7 +124,7 @@ int main_try(int ac, char **av)
         log_error("only a single '-o' option allowed") ;
         return 1 ;
       }
-      c_output = optopt ;
+      c_output = optarg ;
     }
     else if(c=='d')
     {
@@ -133,7 +133,7 @@ int main_try(int ac, char **av)
         log_error("only a single '-d' option allowed") ;
         return 1 ;
       }
-      h_output = optopt ;
+      h_output = optarg ;
     }
     else
     {
@@ -190,7 +190,7 @@ int main_try(int ac, char **av)
 
     if (iodata::storage::write_string_to_file(h_output.c_str(), header.c_str()) < 0)
     {
-      log_error("can't write to '%s': %m", h_output.c_str()) ;
+      log_error("can't write header file to '%s': %m", h_output.c_str()) ;
       failure = true ;
     }
   }
@@ -206,7 +206,7 @@ int main_try(int ac, char **av)
 
     if (iodata::storage::write_string_to_file(c_output.c_str(), program.c_str()) < 0)
     {
-      log_error("can't write to '%s': %m", c_output.c_str()) ;
+      log_error("can't write c++ output to '%s': %m", c_output.c_str()) ;
       failure = true ;
     }
   }
