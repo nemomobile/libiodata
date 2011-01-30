@@ -1,1 +1,8 @@
 LIBS += -liodata
+
+QMAKE_EXTRA_COMPILERS += iodata_type_to_cxx
+
+iodata_type_to_cxx.input = IODATA_TYPES
+iodata_type_to_cxx.output = ${QMAKE_FILE_IN}.c++
+iodata_type_to_cxx.variable_out = SOURCES
+iodata_type_to_cxx.commands = iodata-type-to-c++ ${QMAKE_FILE_IN}
