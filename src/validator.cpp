@@ -32,6 +32,7 @@ using namespace std ;
 
 iodata::validator::validator()
 {
+  is_static = false ;
 #if 0
   static bool first = true ;
   if(first)
@@ -40,9 +41,16 @@ iodata::validator::validator()
 }
 iodata::validator::~validator()
 {
+  if (is_static)
+    return ;
   log_debug("deleting validator::types") ;
   for(map<string,record_type*>::iterator it=types.begin(); it!=types.end(); ++it)
     delete it->second ;
+}
+
+void iodata::validator::set_static()
+{
+  is_static = true ;
 }
 
 void iodata::validator::check_record(record *p, const record_type *r, bool write)

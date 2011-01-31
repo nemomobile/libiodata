@@ -87,6 +87,7 @@ void dump_cpp(ostringstream &cpp, iodata::validator *v)
     }
   }
   cpp << "if (not init_done) { init_done = true ;" << endl ;
+  cpp << "A.set_static() ;" << endl ;
   for (map<string,record_type*>::iterator it = v->types.begin(); it != v->types.end(); ++it)
   {
     record_type *r = it->second ;
