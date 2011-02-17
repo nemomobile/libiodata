@@ -3,8 +3,9 @@ iodata (0.17) unstable; urgency=low
   * using qt4 qmake
   * taking version number from changelog
   * iodata-type-to-c++ compiler
+  * versioned dependency
 
- -- Ilya Dogolazky <ilya.dogolazky@nokia.com>  Thu, 17 Feb 2011 11:34:16 +0200
+ -- Ilya Dogolazky <ilya.dogolazky@nokia.com>  Thu, 17 Feb 2011 13:57:31 +0200
 
 iodata (0.0.16) unstable; urgency=low
 
