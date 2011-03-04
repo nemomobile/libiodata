@@ -1,6 +1,6 @@
 %define _name iodata
 Name:     libiodata
-Version:  0.0.16
+Version:  0.17
 Release:  1
 Summary:  Library for input/ouput data
 Group:    System/System Control
@@ -37,6 +37,7 @@ Requires: testrunner-lite
 %setup -q -n %{_name}-%{version}
 
 %build
+export IODATA_VERSION=`head -n1 debian/changelog | sed "s/.*(\([^)+]*\).*/\1/"`
 %qmake
 make
 
@@ -57,6 +58,7 @@ mv %{buildroot}/%{_datadir}/%{_name}-tests/tests.xml %{buildroot}/%{_datadir}/%{
 %files devel
 %defattr(-,root,root,-)
 %doc COPYING
+%{_bindir}/iodata-type-to-c++
 %{_includedir}/iodata/*
 %{_libdir}/%{name}.so
 %{_datadir}/qt4/mkspecs/features/iodata.prf
