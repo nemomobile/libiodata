@@ -5,7 +5,7 @@ QT -= gui
 CONFIG += qmlog
 
 INCLUDEPATH += ../H
-SOURCES = iodata.cpp validator.cpp storage.cpp
+SOURCES = iodata.cpp validator.cpp storage.cpp misc.cpp
 
 TARGET = iodata
 target.path = /usr/lib
