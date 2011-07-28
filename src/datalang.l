@@ -76,8 +76,8 @@ DECNUM ([1-9]{DEC}*)|0
 <CXX_COMMENT>[^\n]+          ; /* eat characters */
 <INITIAL,C_COMMENT>\n        ; /* eat new line */
 
-<STRING_LIT>\n               ERROR("unterminated string literal") ;
-<STRING_LIT><<EOF>>          ERROR("unterminated string literal at EOF") ;
+<STRING_LIT>\n               ERROR("unterminated string literal") ; delete yylval->str ;
+<STRING_LIT><<EOF>>          ERROR("unterminated string literal at EOF") ; delete yylval->str ;
 <STRING_LIT>[^\n\"\\]+       *yylval->str += STR(0,0) ;
 <STRING_LIT>"\\n"            *yylval->str += (char)'\n' ;
 <STRING_LIT>"\\t"            *yylval->str += (char)'\t' ;
@@ -88,7 +88,7 @@ DECNUM ([1-9]{DEC}*)|0
     *yylval->str += x ;
   }
 <STRING_LIT>"\""             BEGIN(INITIAL) ; return TSTRING ;
-<STRING_LIT>"\\"             ERROR("invalid backslash in a string literal") ;
+<STRING_LIT>"\\"             ERROR("invalid backslash in a string literal") ; delete yylval->str ;
 
 .                       ERROR("invalid character (%x02x)", CHR) ;
 
