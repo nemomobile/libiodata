@@ -71,9 +71,9 @@ DECNUM ([1-9]{DEC}*)|0
 <C_COMMENT>[^*\n]+   ; /* eat comment in chunks */
 <C_COMMENT>"*"       ; /* eat the lone star */
 
-<CXX_COMMENT>\n              ++yylineno ; BEGIN(INITIAL) ;
+<CXX_COMMENT>\n              BEGIN(INITIAL) ;
 <CXX_COMMENT>[^\n]+          ; /* eat characters */
-<INITIAL,C_COMMENT>\n        ++yylineno ;
+<INITIAL,C_COMMENT>\n        ; /* eat new line */
 
 <STRING_LIT>\n               ERROR("unterminated string literal") ;
 <STRING_LIT>[^\n\"\\]+       *yylval->str += STR(0,0) ;
