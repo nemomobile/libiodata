@@ -388,7 +388,13 @@ int storage::read_file_to_string(const char *file, string &input)
 
   int size = st.st_size ;
 
-  if(size<=0)
+  if (size==0)
+  {
+    input.resize(0) ;
+    return 0 ;
+  }
+
+  if(size<0)
   {
     close(fd) ;
     errno = EIO ; // TODO find a better one?
