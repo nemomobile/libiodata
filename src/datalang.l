@@ -14,11 +14,17 @@ using namespace std ;
 #include "parser.hpp"
 
 #define YY_EXTRA_TYPE iodata::parser*
-#define YY_USER_ACTION yylloc->first_line=yylineno ;
 #define YY_INPUT(buf,result,max_size) \
   { yyextra->input.read(buf,max_size) ; \
     result = yyextra->input.gcount() ; \
   }
+
+#define YY_USER_ACTION NXT_CHAR
+#define NXT_CHAR \
+  yylloc_param->first_line = yylloc_param->last_line = yylineno ; \
+  yylloc_param->first_column = yycolumn ; \
+  yylloc_param->last_column = yycolumn+yyleng-1 ; \
+  yycolumn += yyleng ;
 
 #define STR(a,b) string(yytext+(a), yyleng-(a)-(b))
 #define STRING(a,t,b) yylval->str = new STR(a,b) ; return t ;
