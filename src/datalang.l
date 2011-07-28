@@ -28,6 +28,7 @@ void iodata_error(YYLTYPE* locp, iodata::parser* context, const char* format, ..
   yylloc_param->last_column = yycolumn+yyleng-1 ; \
   yycolumn += yyleng ;
 
+#define CHR (yytext[0])
 #define STR(a,b) string(yytext+(a), yyleng-(a)-(b))
 #define STRING(a,t,b) yylval->str = new STR(a,b) ; return t ;
 #define INTEGER(a, base, sign, t) \
@@ -87,7 +88,7 @@ DECNUM ([1-9]{DEC}*)|0
 <STRING_LIT>"\""             BEGIN(INITIAL) ; return TSTRING ;
 
 
-.                       ERROR("invalid character") ;
+.                       ERROR("invalid character (%x02x)", CHR) ;
 
 %%
 
