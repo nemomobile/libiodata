@@ -44,6 +44,8 @@ void iodata_error(YYLTYPE* locp, iodata::parser* context, const char* err) ;
 %type <ioarray> array
 %type <iorecord> record record_
 
+%destructor { delete $$ ; } bytes integer bitmask item array record record_ sbits TSTRING TIDENT TDOLLAR
+
 %start config
 
 %%
