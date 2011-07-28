@@ -136,6 +136,8 @@ namespace iodata
     void add(const string &k, bitmask_t v, const bit_codec *c) { x[k] = new bitmask(v,c); }
     void add(const string &k, const string &v) { x[k] = new bytes(v) ; }
 
+    bool key_present(const string &k) { return x.count(k)>0 ; }
+
     // void throw_unless_record() { } ;
     void plain_output(ostream &os, const string &prefix) const ;
     virtual ~record() ;

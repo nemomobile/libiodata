@@ -25,7 +25,7 @@
 
 %{
 int iodata_lex(YYSTYPE* lvalp, YYLTYPE* llocp, void* scanner) ;
-void iodata_error(YYLTYPE* locp, iodata::parser* context, const char* err) ;
+void iodata_error(YYLTYPE* locp, iodata::parser* context, const char* format, ...) ;
 #define scanner context->scanner
 %}
 
@@ -66,7 +66,21 @@ record : { $$ = new iodata::record }
        ;
 
 record_ : TIDENT '=' item { ($$=new iodata::record)->add(*$1,$3) ; delete $1 }
-        | TIDENT '=' item ',' record_ { ($$=$5)->add(*$1,$3) ; delete $1 /* XXX replace? */ }
+        | TIDENT '=' item ',' record_ {
+            if ($5->key_present(*$1))
+            {
+              iodata_error(&yylloc, context, "key '%s' redefined", $1->c_str()) ;
+              delete $1 ;
+              delete $3 ;
+              delete $5 ;
+              YYABORT ;
+            }
+            else
+            {
+              ($$=$5)->add(*$1,$3) ;
+              delete $1 ;
+            }
+          }
         ;
 
 array : item { ($$=new iodata::array)->add($1) }
