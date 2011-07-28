@@ -207,6 +207,8 @@ namespace iodata
     void *scanner ;
     istream &input ;
     record *tree ;
+    string error_message ;
+    int error_line, error_column ;
     parser(istream &in) : input(in)
     {
       tree = NULL ;
@@ -220,6 +222,8 @@ namespace iodata
     }
     bool parse()
     {
+      error_line = error_column = -1 ;
+      error_message = "" ;
       iodata_parse(this) ;
       return tree!=NULL ;
     }

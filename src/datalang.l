@@ -13,6 +13,8 @@ using namespace std ;
 #include "iodata.h"
 #include "parser.hpp"
 
+void iodata_error(YYLTYPE* locp, iodata::parser* context, const char* format, ...) ;
+
 #define YY_EXTRA_TYPE iodata::parser*
 #define YY_INPUT(buf,result,max_size) \
   { yyextra->input.read(buf,max_size) ; \
@@ -31,7 +33,7 @@ using namespace std ;
 #define INTEGER(a, base, sign, t) \
   yylval->unsign = sign strtoll(STR(a,0).c_str(), NULL, base) ; \
   return t ;
-#define ERROR(msg) cout << "token TERROR, message: " << string(msg) << endl ; return TERROR ;
+#define ERROR(msg...) iodata_error(yylloc_param, yyextra, msg) ; return TERROR ;
 %}
 
 %x C_COMMENT CXX_COMMENT STRING_LIT
@@ -99,11 +101,19 @@ void iodata::parser::destroy_scanner()
 {
   yylex_destroy(scanner) ;
 }
-void iodata_error(YYLTYPE* locp, iodata::parser* context, const char* err)
+
+#include "misc.h"
+
+void iodata_error(YYLTYPE* locp, iodata::parser* context, const char *format, ...)
 {
-  ostringstream os ;
-  os << "parser error at " << locp->first_line << ": " << err ;
-  // cerr << "throwing an iodata::exception(" << os.str() << ")" << endl ;
-  throw iodata::exception(os.str()) ;
+  if (context->error_line!=-1)
+    return ;
+
+  va_list args ;
+  va_start(args, format) ;
+
+  context->error_line = locp->first_line ;
+  context->error_column = locp->first_column ;
+  context->error_message = str_vprintf(format, args) ;
 }
 
