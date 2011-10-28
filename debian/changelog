@@ -1,9 +1,13 @@
 iodata (0.18) unstable; urgency=low
 
+  [ Ilya Dogolazky ]
   * tracking location in the tokenizer
   * memory leaks on invalid input fixed
 
- -- Ilya Dogolazky <ilya.dogolazky@nokia.com>  Thu, 28 Jul 2011 15:54:11 +0300
+  [ Victor Portnov ]
+  * Fixes: NB#288492 - iodata leaks memory in case of parsing error
+
+ -- Victor Portnov <victor.portnov@teleca.com>  Fri, 28 Oct 2011 13:45:51 +0400
 
 iodata (0.17) unstable; urgency=low
 

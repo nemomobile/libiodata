@@ -1,7 +1,7 @@
 Source: iodata
 Section: misc
 Priority: optional
-Maintainer: Ilya Dogolazky <ilya.dogolazky@nokia.com>
+Maintainer: Victor Portnov <victor.portnov@teleca.com>
 Build-Depends: debhelper (>= 4.1.0),
  libqmlog-dev,
  libqt4-dev (>= 4.5)
