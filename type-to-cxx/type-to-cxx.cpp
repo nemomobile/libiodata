@@ -3,11 +3,18 @@ using namespace std ;
 
 #include <argp.h>
 
+#include <QtGlobal>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <qmlog-qt5>
+#include <iodata-qt5/iodata.h>
+#include <iodata-qt5/validator.h>
+#include <iodata-qt5/storage.h>
+#else
 #include <qmlog>
-
-#include <iodata/iodata>
-#include <iodata/validator>
-#include <iodata/storage>
+#include <iodata/iodata.h>
+#include <iodata/validator.h>
+#include <iodata/storage.h>
+#endif
 
 void dump_h(ostringstream &h, iodata::validator *v)
 {
