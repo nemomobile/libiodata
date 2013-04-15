@@ -5,9 +5,14 @@
 #include <sstream>
 using namespace std ;
 
+#include <QtGlobal>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <qmlog-qt5>
+#include <iodata-qt5/iodata.h>
+#else
 #include <qmlog>
-
-#include <iodata/iodata>
+#include <iodata/iodata.h>
+#endif
 
 int trivial(int ac, char **av) ;
 int storage(int ac, char **av) ;
