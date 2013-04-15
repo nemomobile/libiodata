@@ -12,3 +12,5 @@ equals(QT_MAJOR_VERSION, 5) {
 }
 
 INSTALLS = prf
+
+OTHER_FILES += rpm/*.spec

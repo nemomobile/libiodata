@@ -11,7 +11,6 @@ Source0:  %{_name}-%{version}.tar.bz2
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: bison
 BuildRequires: flex
-BuildRequires: libqmlog-qt5-devel
 
 %description
 This package provides a library for writing and reading structured data.

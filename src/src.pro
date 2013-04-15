@@ -2,10 +2,7 @@ VERSION = 0.$$(IODATA_VERSION)
 TEMPLATE=lib
 QT -= gui
 
-equals(QT_MAJOR_VERSION, 4): CONFIG += qmlog
-equals(QT_MAJOR_VERSION, 5): CONFIG += qmlog-qt5
-
-INCLUDEPATH += ../H
+HEADERS = iodata.h validator.h storage.h misc.h log.h
 SOURCES = iodata.cpp validator.cpp storage.cpp misc.cpp
 
 equals(QT_MAJOR_VERSION, 4): TARGET = iodata

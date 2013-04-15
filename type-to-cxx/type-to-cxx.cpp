@@ -3,18 +3,10 @@ using namespace std ;
 
 #include <argp.h>
 
-#include <QtGlobal>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-#include <qmlog-qt5>
-#include <iodata-qt5/iodata.h>
-#include <iodata-qt5/validator.h>
-#include <iodata-qt5/storage.h>
-#else
-#include <qmlog>
-#include <iodata/iodata.h>
-#include <iodata/validator.h>
-#include <iodata/storage.h>
-#endif
+#include "../src/iodata.h"
+#include "../src/validator.h"
+#include "../src/storage.h"
+#include "../src/log.h"
 
 void dump_h(ostringstream &h, iodata::validator *v)
 {
@@ -113,7 +105,6 @@ void dump_cpp(ostringstream &cpp, iodata::validator *v)
 
 int main_try(int ac, char **av)
 {
-  qmlog::enable() ;
   string c_output, h_output ;
   vector<string> input ;
 

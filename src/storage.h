@@ -32,14 +32,7 @@
 #include <vector>
 #include <string>
 
-#include <QtGlobal>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-#include <iodata-qt5/iodata.h>
-#include <iodata-qt5/validator.h>
-#else
-#include <iodata/iodata.h>
-#include <iodata/validator.h>
-#endif
+#include "iodata.h"
 
 namespace iodata { class storage ; }
 

@@ -25,12 +25,7 @@
 #include <iostream>
 using namespace std ;
 
-#include <QtGlobal>
-#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
-#include <qmlog-qt5>
-#else
-#include <qmlog>
-#endif
+#include "log.h"
 
 #include "iodata.h"
 #include "validator.h"
