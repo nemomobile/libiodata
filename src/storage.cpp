@@ -30,11 +30,16 @@
 #include <sstream>
 using namespace std ;
 
+#include <QtGlobal>
+#if QT_VERSION >= QT_VERSION_CHECK(5, 0, 0)
+#include <qmlog-qt5>
+#else
 #include <qmlog>
+#endif
 
-#include <iodata/iodata>
-#include <iodata/validator>
-#include <iodata/storage>
+#include "iodata.h"
+#include "validator.h"
+#include "storage.h"
 
 using namespace iodata ;
 

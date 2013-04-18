@@ -1,0 +1,13 @@
+<testdefinition version="0.1">
+  <suite name="iodata-tests" domain="System Software">
+    <set name="simple_tests" description="basic iodata functionality" feature="System Control" requirement="MaSSW-815, MaSSW-1167">
+      <environments><scratchbox>false</scratchbox><hardware>true</hardware></environments>
+      <case name="trivial" description="parse a trivial structure from a string" subfeature="TimeAlarm">
+        <step>iodata-qt5-test trivial</step>
+      </case>
+      <case name="storage" description="load, save, use default values" subfeature="TimeAlarm">
+        <step>iodata-qt5-test storage</step>
+      </case>
+    </set>
+  </suite>
+</testdefinition>
