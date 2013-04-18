@@ -6,7 +6,7 @@ Summary:  Library for input/ouput data
 Group:    System/System Control
 License:  LGPLv2
 URL:      http://meego.gitorious.org/meego-middleware/iodata
-Source0:  %{_name}-%{version}.tar.bz2
+Source0:  %{name}-%{version}.tar.bz2
 
 BuildRequires: pkgconfig(Qt5Core)
 BuildRequires: bison
@@ -33,11 +33,11 @@ Requires: testrunner-lite
 %{summary}.
 
 %prep
-%setup -q -n %{_name}-%{version}
+%setup -q -n %{name}-%{version}
 
 %build
 export IODATA_VERSION=`head -n1 debian/changelog | sed "s/.*(\([^)+]*\).*/\1/"`
-%qmake
+%qmake5
 make
 
 %install
