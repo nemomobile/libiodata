@@ -32,8 +32,7 @@
 #include <vector>
 #include <string>
 
-#include <iodata/iodata>
-#include <iodata/validator>
+#include "iodata.h"
 
 namespace iodata { class storage ; }
 

@@ -5,9 +5,8 @@
 #include <sstream>
 using namespace std ;
 
-#include <qmlog>
-
-#include <iodata/iodata>
+#include "../src/iodata.h"
+#include "../src/log.h"
 
 int trivial(int ac, char **av) ;
 int storage(int ac, char **av) ;

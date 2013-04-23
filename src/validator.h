@@ -34,8 +34,7 @@
 #include <typeinfo>
 using namespace std ;
 
-
-#include <iodata/iodata>
+#include "iodata.h"
 
 namespace iodata
 {

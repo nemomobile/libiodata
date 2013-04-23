@@ -25,7 +25,7 @@
 #include <iostream>
 using namespace std ;
 
-#include <qmlog>
+#include "log.h"
 
 #include "iodata.h"
 #include "validator.h"
