@@ -4,9 +4,8 @@
 
 using namespace std ;
 
-#include <qmlog>
-
 #include "misc.h"
+#include "log.h"
 
 string str_vprintf(const char *format, va_list varg)
 {

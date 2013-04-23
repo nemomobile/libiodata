@@ -2,21 +2,18 @@ VERSION = 0.$$(IODATA_VERSION)
 TEMPLATE=lib
 QT -= gui
 
-CONFIG += qmlog
-
-INCLUDEPATH += ../H
+HEADERS = iodata.h validator.h storage.h misc.h log.h
 SOURCES = iodata.cpp validator.cpp storage.cpp misc.cpp
 
-TARGET = iodata
+equals(QT_MAJOR_VERSION, 4): TARGET = iodata
+equals(QT_MAJOR_VERSION, 5): TARGET = iodata-qt5
 target.path = /usr/lib
 
 devheaders.files = iodata.h validator.h storage.h iodata validator storage
-devheaders.path  = /usr/include/iodata
+equals(QT_MAJOR_VERSION, 4): devheaders.path  = /usr/include/iodata
+equals(QT_MAJOR_VERSION, 5): devheaders.path  = /usr/include/iodata-qt5
 
-prf.files = iodata.prf
-prf.path = /usr/share/qt4/mkspecs/features
-
-INSTALLS = target devheaders prf
+INSTALLS = target devheaders
 
 FLEXSOURCES = datalang.l
 BISONSOURCES = datalang.y

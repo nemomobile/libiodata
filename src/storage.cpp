@@ -30,11 +30,10 @@
 #include <sstream>
 using namespace std ;
 
-#include <qmlog>
-
-#include <iodata/iodata>
-#include <iodata/validator>
-#include <iodata/storage>
+#include "log.h"
+#include "iodata.h"
+#include "validator.h"
+#include "storage.h"
 
 using namespace iodata ;
 
