@@ -36,7 +36,7 @@ Requires: testrunner-lite
 %setup -q -n %{name}-%{version}
 
 %build
-export IODATA_VERSION=`head -n1 debian/changelog | sed "s/.*(\([^)+]*\).*/\1/"`
+export IODATA_VERSION=%version
 %qmake
 make
 
