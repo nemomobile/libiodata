@@ -8,6 +8,7 @@
 
 %{
 #include "iodata.h"
+#include <stdio.h>
 %}
 
 %union {
@@ -50,22 +51,22 @@ void iodata_error(YYLTYPE* locp, iodata::parser* context, const char* format, ..
 
 %%
 
-config : record '.' { context->tree = $1 }
+config : record '.' { context->tree = $1; }
        ;
 
-item : '{' record '}' { $$=$2 }
-     | '[' array ']' { $$=$2 }
-     | '['       ']' { $$=new iodata::array }
-     | integer { $$=$1 }
-     | bitmask { $$=$1 }
-     | bytes { $$=$1 }
+item : '{' record '}' { $$=$2; }
+     | '[' array ']' { $$=$2; }
+     | '['       ']' { $$=new iodata::array; }
+     | integer { $$=$1; }
+     | bitmask { $$=$1; }
+     | bytes { $$=$1; }
      ;
 
-record : { $$ = new iodata::record }
-       | record_ { $$=$1 }
+record : { $$ = new iodata::record; }
+       | record_ { $$=$1; }
        ;
 
-record_ : TIDENT '=' item { ($$=new iodata::record)->add(*$1,$3) ; delete $1 }
+record_ : TIDENT '=' item { ($$=new iodata::record)->add(*$1,$3) ; delete $1; }
         | TIDENT '=' item ',' record_ {
             if ($5->key_present(*$1))
             {
@@ -83,26 +84,26 @@ record_ : TIDENT '=' item { ($$=new iodata::record)->add(*$1,$3) ; delete $1 }
           }
         ;
 
-array : item { ($$=new iodata::array)->add($1) }
-      | array ',' item { ($$=$1)->add($3) }
+array : item { ($$=new iodata::array)->add($1); }
+      | array ',' item { ($$=$1)->add($3); }
       ;
 
-integer : TPOSITIVE { $$=new iodata::integer(iodata::integer_t($1)) } ;
+integer : TPOSITIVE { $$=new iodata::integer(iodata::integer_t($1)); } ;
 
-integer : TSIGNED { $$=new iodata::integer($1) } ;
+integer : TSIGNED { $$=new iodata::integer($1); } ;
 
-ibits : '$' TPOSITIVE { $$ = $2 } ;
+ibits : '$' TPOSITIVE { $$ = $2; } ;
 
-sbits : TDOLLAR { $$ = $1 } ;
+sbits : TDOLLAR { $$ = $1; } ;
 
-bitmask : ibits { ($$=new iodata::bitmask)->add($1) }
-        | sbits { ($$=new iodata::bitmask)->add(*$1) ; delete $1 }
-        | bitmask '|' ibits { ($$=$1)->add($3) }
-        | bitmask '|' sbits { ($$=$1)->add(*$3) ;  delete $3 }
+bitmask : ibits { ($$=new iodata::bitmask)->add($1); }
+        | sbits { ($$=new iodata::bitmask)->add(*$1) ; delete $1; }
+        | bitmask '|' ibits { ($$=$1)->add($3); }
+        | bitmask '|' sbits { ($$=$1)->add(*$3) ;  delete $3; }
         ;
 
-bytes : TSTRING { $$=new iodata::bytes(*$1) ; delete $1 }
-      | bytes '+' TSTRING { ($$=$1)->x += *$3 ; delete $3 }
+bytes : TSTRING { $$=new iodata::bytes(*$1) ; delete $1; }
+      | bytes '+' TSTRING { ($$=$1)->x += *$3 ; delete $3; }
       ;
 
 
