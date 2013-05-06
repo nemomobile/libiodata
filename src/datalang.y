@@ -8,6 +8,7 @@
 
 %{
 #include "iodata.h"
+#include <stdio.h>
 %}
 
 %union {
