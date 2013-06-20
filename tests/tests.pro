@@ -1,20 +1,31 @@
 VERSION = $$(IODATA_VERSION)
 TEMPLATE = app
 QT -= gui
-equals(QT_MAJOR_VERSION, 4): TARGET = iodata-test
-equals(QT_MAJOR_VERSION, 5): TARGET = iodata-qt5-test
 
-INSTALLS = target tests
+equals(QT_MAJOR_VERSION, 4): PACKAGENAME = iodata
+equals(QT_MAJOR_VERSION, 5): PACKAGENAME = iodata-qt5
 
-equals(QT_MAJOR_VERSION, 4): LIBS += -liodata
-equals(QT_MAJOR_VERSION, 5): LIBS += -liodata-qt5
+TARGET = $${PACKAGENAME}-test
+
+LIBS += -l$${PACKAGENAME}
 QMAKE_LIBDIR_FLAGS += -L../src
 
 SOURCES = iodata-test.cpp
 
-equals(QT_MAJOR_VERSION, 4): tests.path = /usr/share/iodata-tests
-equals(QT_MAJOR_VERSION, 5): tests.path = /usr/share/iodata-qt5-tests
-
-tests.files = tests.xml
-
 target.path = /usr/bin
+
+tests_xml.target = tests.xml
+tests_xml.depends = $$PWD/tests.xml.in
+tests_xml.commands = sed -e "s:@PACKAGENAME@:$${PACKAGENAME}:g" $< > $@
+tests_xml.CONFIG += no_check_exist
+
+QMAKE_EXTRA_TARGETS = tests_xml
+QMAKE_CLEAN += $$tests_xml.target
+PRE_TARGETDEPS += $$tests_xml.target
+
+tests_install.path = /usr/share/$${PACKAGENAME}-tests
+tests_install.files = $$tests_xml.target
+tests_install.CONFIG += no_check_exist
+
+INSTALLS = target tests_install
+
