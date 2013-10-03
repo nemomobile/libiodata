@@ -3,11 +3,13 @@
     <set name="@PACKAGENAME@-simple_tests" description="basic iodata functionality" feature="System Control" requirement="MaSSW-815, MaSSW-1167">
       <environments><scratchbox>false</scratchbox><hardware>true</hardware></environments>
       <case name="trivial" description="parse a trivial structure from a string" subfeature="TimeAlarm">
-        <step>iodata-test trivial</step>
+        <step>@PATH@/@PACKAGENAME@-test trivial</step>
       </case>
+<!--  NOT implemented yet
       <case name="storage" description="load, save, use default values" subfeature="TimeAlarm">
         <step>iodata-test storage</step>
       </case>
+-->
     </set>
   </suite>
 </testdefinition>

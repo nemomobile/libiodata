@@ -16,7 +16,7 @@ target.path = /usr/bin
 
 tests_xml.target = tests.xml
 tests_xml.depends = $$PWD/tests.xml.in
-tests_xml.commands = sed -e "s:@PACKAGENAME@:$${PACKAGENAME}:g" $< > $@
+tests_xml.commands = sed -e "s:@PACKAGENAME@:$${PACKAGENAME}:g" -e \'s%@PATH@%$${target.path}%\' $<  > $@
 tests_xml.CONFIG += no_check_exist
 
 QMAKE_EXTRA_TARGETS = tests_xml
