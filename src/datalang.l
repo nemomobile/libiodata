@@ -83,8 +83,8 @@ DECNUM ([1-9]{DEC}*)|0
 <STRING_LIT>"\\t"            *yylval->str += (char)'\t' ;
 <STRING_LIT>"\\\\"           *yylval->str += (char)'\\' ;
 <STRING_LIT>"\\\""           *yylval->str += (char)'\"' ;
-<STRING_LIT>"\\x{"{HEX}{HEX}"}" {
-    char x[2]={ (char)strtoll(STR(3,1).c_str(), NULL, 16), 0} ;
+<STRING_LIT>"\\x"{HEX}{HEX} {
+    char x[2]={ (char)strtoll(STR(2,0).c_str(), NULL, 16), 0} ;
     *yylval->str += x ;
   }
 <STRING_LIT>"\""             BEGIN(INITIAL) ; return TSTRING ;
