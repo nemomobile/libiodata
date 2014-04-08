@@ -41,7 +41,7 @@ int storage(int, char **)
 
 int trivial(int , char **)
 {
-  string data_s = "a=5, b=007, c=0x2348924, d={a=1, b=02, c=0x3, d=[1,\"xxx\"]} ." ;
+  string data_s = "a=5, b=007, c=0x2348924, d={a=1, b=02, c=0x3, d=[1,\"xxx\"]}, e=\"\\x22\" ." ;
   istringstream data_is(data_s) ;
   iodata::parser x(data_is) ;
 #define R(p,k) (dynamic_cast<iodata::record*>(p)->x[k])
@@ -58,6 +58,7 @@ int trivial(int , char **)
     assert(I(R(R(x.tree,"d"),"c"))==0x3) ;
     assert(I(A(R(R(x.tree,"d"),"d"),0))==1) ;
     assert(S(A(R(R(x.tree,"d"),"d"),1))=="xxx") ;
+    assert(S(R(x.tree,"e"))=="\"");
 
     iodata::record *x_tree = x.detach() ;
 
@@ -69,6 +70,7 @@ int trivial(int , char **)
     assert(I(R(R(x_tree,"d"),"c"))==0x3) ;
     assert(I(A(R(R(x_tree,"d"),"d"),0))==1) ;
     assert(S(A(R(R(x_tree,"d"),"d"),1))=="xxx") ;
+    assert(S(R(x_tree,"e"))=="\"");
 
     assert(x_tree->get("a")->value()==5) ;
     assert(x_tree->get("b")->value()==007) ;
@@ -78,6 +80,7 @@ int trivial(int , char **)
     assert(x_tree->get("d")->rec()->get("c")->value()==0x3) ;
     assert(x_tree->get("d")->rec()->get("d")->arr()->get(0)->value()==1) ;
     assert(x_tree->get("d")->rec()->get("d")->arr()->get(1)->str()=="xxx") ;
+    assert(x_tree->get("e")->str()=="\"");
 
     delete x_tree ;
   }
