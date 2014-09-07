@@ -9,6 +9,7 @@ using namespace std ;
 #include "../src/validator.h"
 #include "../src/storage.h"
 #include "../src/log.h"
+#include <crypt.h>
 
 void dump_h(ostringstream &h, iodata::validator *v)
 {
