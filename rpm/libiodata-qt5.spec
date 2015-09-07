@@ -1,6 +1,6 @@
 %define _name iodata-qt5
 Name:     libiodata-qt5
-Version:  0.19
+Version:  0.19.8
 Release:  1
 Summary:  Library for input/ouput data
 Group:    System/System Control
