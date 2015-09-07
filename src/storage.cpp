@@ -94,7 +94,9 @@ record *storage::load()
     int res = read_file_to_string(path_i, data_cached) ;
     if(res<0)
     {
-      log_warning("can't read '%s': %m", path_i) ;
+      // let caller decide if non-existing files require diagnostic logging
+      if(errno != ENOENT)
+        log_warning("can't read '%s': %m", path_i) ;
       continue ;
     }
     // read success
