@@ -1,6 +1,0 @@
-usr/include/iodata
-usr/lib/libiodata.so
-
-usr/share/qt4/mkspecs/features/iodata.prf
-
-usr/bin/iodata-type-to-c++

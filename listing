@@ -1,6 +1,0 @@
-#!/bin/sh -e
-
-find src -name \*.c
-find src -name \*.h
-find src -name \*.cpp
-echo debian/copyright
